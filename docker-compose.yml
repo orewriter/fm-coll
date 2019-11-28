@@ -6,7 +6,7 @@ services:
       restart: always
       image: tomcat
       volumes:
-         - './web_apps/:/usr/local/tomcat/webapps'
+         - './web_apps/:/usr/local/tomcat/webapps' #letak direktori aplikasi dan target directory yang ada di container
          - '/etc/localtime:/etc/localtime:ro'
       ports:
          - "8080:8080"
@@ -15,8 +15,19 @@ services:
       restart: always
       image: node
       volumes:
-         - './node/:/usr/src/app'
+         - './node/:/usr/src/app'  #letak direktori aplikasi dan target directory yang ada di container
+         - '/etc/localtime:/etc/localtime:ro'
       ports:
-         - "3000:3000"
-      command:
-         -     #command to start
+         - "3000:3000"                           #sesuaikan port dengan listener port applikasi
+      command: /bin/sh /usr/src/app/*nama js*.js #command yang digunakan untuk starting
+  python:
+      container_name: python
+      build: .python_build
+      restart: always
+      image: python_build
+      volumes:
+         - './python/:/usr/src/app'
+         - '/etc/localtime:/etc/localtime:ro'
+      ports:
+         - "4000:4000"                           #sesuaikan port dengan listener port applikasi
+      command: /usr/local/bin/uwsgi --socket 0.0.0.0:4000 --protocol=http --ini /usr/src/app/*nama init file*.ini
