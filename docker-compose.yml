@@ -1,0 +1,22 @@
+version: '3.0'
+
+services:
+  web_apps:
+      container_name: web_apps
+      restart: always
+      image: tomcat
+      volumes:
+         - './web_apps/:/usr/local/tomcat/webapps'
+         - '/etc/localtime:/etc/localtime:ro'
+      ports:
+         - "8080:8080"
+  node:
+      container_name: node_js
+      restart: always
+      image: node
+      volumes:
+         - './node/:/usr/src/app'
+      ports:
+         - "3000:3000"
+      command:
+         -     #command to start
