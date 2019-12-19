@@ -9,19 +9,9 @@ services:
          - './web_apps/:/usr/local/tomcat/webapps' #letak direktori aplikasi dan target directory yang ada di container
          - './jdbc.properties:/Applications/NetBeans/glassfish-4.1.1/configuration/jdbc.properties'
          - './urls.properties:/Applications/NetBeans/glassfish-4.1.1/configuration/urls.properties'
-         #- '/etc/localtime:/etc/localtime:ro'
+         - '/etc/localtime:/etc/localtime:ro'
       ports:
-         - "8081:8080"
-  node:
-      container_name: node_js
-      restart: always
-      image: node
-      volumes:
-         - './node/:/usr/src/app'  #letak direktori aplikasi dan target directory yang ada di container
-         #- '/etc/localtime:/etc/localtime:ro'
-      ports:
-         - "3000:3000"                           #sesuaikan port dengan listener port applikasi
-      command: /bin/sh /usr/src/app/*nama js*.js #command yang digunakan untuk starting
+         - "8080:8080"
   python:
       container_name: python
       build: ./python_build
@@ -29,7 +19,7 @@ services:
       image: python_build
       volumes:
          - './python/:/usr/src/app'
-         #- '/etc/localtime:/etc/localtime:ro'
+         - '/etc/localtime:/etc/localtime:ro'
       ports:
          - "5000:5000"                           #sesuaikan port dengan listener port applikasi
       command: python /usr/src/app/fm_face_recognition.py
