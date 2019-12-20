@@ -12,6 +12,9 @@ services:
          - '/etc/localtime:/etc/localtime:ro'
       ports:
          - "8080:8080"
+      networks:
+           vpcbr:
+             ipv4_address: 172.15.2.3
   python:
       container_name: python
       build: ./python_build
@@ -23,8 +26,12 @@ services:
       ports:
          - "5000:5000"                           #sesuaikan port dengan listener port applikasi
       command: python /usr/src/app/fm_face_recognition.py
+      networks:
+           vpcbr:
+             ipv4_address: 172.15.2.4
   tunnel:
       container_name: tunnel
+      privileged: true
       build: ./tunnel_build
       restart: always
       image: tunnel
@@ -33,3 +40,16 @@ services:
       command: openvpn /tunnel/BSD.ovpn
       devices:
          - /dev/net/tun:/dev/net/tun
+      networks:
+           vpcbr:
+             ipv4_address: 172.15.2.2
+
+networks:
+    vpcbr:
+      driver: bridge
+      driver_opts:
+        com.docker.network.enable_ipv6: "false"
+      ipam:
+         driver: default
+         config:
+            - subnet: 172.15.2.0/24

@@ -1,3 +1,9 @@
-FROM centos:7
+FROM alpine
+MAINTAINER David Personette <dperson@gmail.com>
 
-RUN yum update -y && yum install epel-release -y && yum install openvpn -y
+# Install openvpn
+RUN apk --no-cache --no-progress upgrade && \
+    apk --no-cache --no-progress add bash curl ip6tables iptables openvpn \
+                shadow tini && \
+    addgroup -S vpn && \
+    rm -rf /tmp/*
